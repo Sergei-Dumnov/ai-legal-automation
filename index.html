@@ -1,369 +1,328 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="AI legal document automation for law firms. A purpose-built system for generating professionally formatted Australian legal documents fast, consistently, and with proper drafting discipline.">
-<title>AI Legal Document Automation | Sergei Dumnov</title>
-<style>
-:root{
-  --bg:#07101f; --bg2:#0b1730; --panel:rgba(16,24,49,.78); --line:rgba(255,255,255,.09);
-  --text:#eef4ff; --muted:#aebcdf; --accent:#79e7ff; --accent2:#9b8dff; --ok:#60d9ab;
-  --shadow:0 18px 50px rgba(0,0,0,.35); --r:20px; --max:1120px;
-}
-*{box-sizing:border-box} html{scroll-behavior:smooth}
-body{
-  margin:0; color:var(--text); font:16px/1.65 Inter,Segoe UI,Arial,sans-serif;
-  background:
-    radial-gradient(900px 520px at 10% -10%, rgba(121,231,255,.14), transparent 60%),
-    radial-gradient(800px 480px at 90% 0, rgba(155,141,255,.12), transparent 55%),
-    linear-gradient(180deg,#050913,#091222 45%,#07101f 100%);
-}
-a{color:inherit;text-decoration:none}
-.wrap{max-width:var(--max);margin:auto;padding:0 24px}
-.top{
-  position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);
-  background:rgba(5,9,19,.64);border-bottom:1px solid var(--line)
-}
-.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:-.02em}
-.mark{
-  width:38px;height:38px;border-radius:14px;position:relative;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 24px rgba(121,231,255,.22)
-}
-.mark:before,.mark:after{content:"";position:absolute;background:rgba(7,16,31,.9);border-radius:999px}
-.mark:before{width:22px;height:4px;left:8px;top:11px;box-shadow:0 10px 0 rgba(7,16,31,.9)}
-.mark:after{width:4px;height:22px;right:11px;top:8px}
-.links{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.links a{color:var(--muted);font-size:14px;font-weight:650}
-.links a:hover{color:var(--text)}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;border-radius:14px;
-  border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);font-weight:760;transition:.18s ease;box-shadow:var(--shadow)
-}
-.btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
-.btn.primary{border:0;color:#08111d;background:linear-gradient(135deg,var(--accent),var(--accent2))}
-.hero{padding:74px 0 42px}
-.hero-grid,.two,.compare,.stack{display:grid;gap:16px}
-.hero-grid{grid-template-columns:1.08fr .92fr}
-.two,.compare,.stack{grid-template-columns:1fr 1fr}
-.pill{
-  display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;font-weight:740
-}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 6px rgba(96,217,171,.1)}
-h1{margin:18px 0 14px;font-size:clamp(2.6rem,5vw,4.8rem);line-height:.96;letter-spacing:-.05em;max-width:11ch}
-.lead{max-width:62ch;color:var(--muted);font-size:clamp(1rem,1.3vw,1.14rem)}
-.actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 14px}
-.note{color:var(--muted);font-size:13.5px;max-width:70ch}
-.note strong{color:var(--text)}
-.panel,.card{
-  position:relative;overflow:hidden;border:1px solid var(--line);border-radius:var(--r);
-  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));box-shadow:var(--shadow)
-}
-.panel{background:linear-gradient(180deg,rgba(12,19,39,.86),rgba(11,17,34,.8))}
-.panel:before,.card:before{
-  content:"";position:absolute;right:-70px;top:-70px;width:180px;height:180px;border-radius:50%;
-  background:radial-gradient(circle at 30% 30%, rgba(121,231,255,.15), transparent 62%)
-}
-.inner{padding:22px}
-.proof-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
-.proof-top h3,.card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em}
-.proof-top p,.card p{margin:0;color:var(--muted)}
-.tag{padding:8px 10px;border-radius:999px;border:1px solid rgba(96,217,171,.25);background:rgba(96,217,171,.1);font-size:12px;color:#c8f8e6;font-weight:760}
-.metrics,.grid3,.signals{display:grid;gap:10px}
-.metrics,.grid3{grid-template-columns:repeat(3,1fr)}
-.metric,.signal,.stack-item,.step,.faq details{
-  border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.035)
-}
-.metric,.signal,.stack-item,.step{padding:14px}
-.metric strong{display:block;font-size:24px;letter-spacing:-.04em}
-.metric span,.signal span{display:block;color:var(--muted);font-size:12.6px;line-height:1.45}
-.doc{
-  margin-top:4px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(11,16,32,.94),rgba(7,10,20,.94));overflow:hidden
-}
-.doc-top{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted);font-weight:700}
-.doc-body{padding:16px;display:grid;gap:10px;font:12.6px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-.blk{padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
-.blk b{color:var(--accent)}
-.line{height:10px;border-radius:999px;background:rgba(255,255,255,.08)}
-.w48{width:48%}.w72{width:72%}
-section{padding:58px 0}
-.head{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:22px}
-.head h2{margin:0;font-size:clamp(1.8rem,2.5vw,2.6rem);line-height:1.05;letter-spacing:-.04em}
-.head p{margin:0;color:var(--muted);max-width:66ch}
-.small{display:inline-block;margin-bottom:10px;color:#8ea3c8;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-.stack-item{position:relative;padding-left:18px}
-.stack-item:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--accent),var(--accent2),var(--ok))}
-.stack-item h3{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.stack-item h3 span{font-size:12px;color:#8ea3c8;letter-spacing:.08em;text-transform:uppercase}
-.code{margin:0;padding:16px;overflow:auto;font:13px/1.58 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#dfe8ff}
-.k{color:var(--accent)} .v{color:#cbbcff} .g{color:#93f0c9}
-.signals{grid-template-columns:repeat(4,1fr);margin-top:16px}
-.step{display:grid;grid-template-columns:56px 1fr;gap:14px}
-.num{
-  width:56px;height:56px;border-radius:16px;display:grid;place-items:center;
-  font-size:18px;font-weight:900;color:#08111d;background:linear-gradient(135deg,var(--accent),var(--accent2))
-}
-.list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
-.list li{display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:start;color:var(--muted)}
-.b{width:18px;height:18px;border-radius:7px;margin-top:2px;position:relative;background:rgba(121,231,255,.12);border:1px solid rgba(121,231,255,.26)}
-.b.warn{background:rgba(255,209,102,.11);border-color:rgba(255,209,102,.24)}
-.b:after{content:"";position:absolute;left:4px;top:4px;width:8px;height:4px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
-.b.warn:after{border-left-color:#ffd166;border-bottom-color:#ffd166}
-.faq{display:grid;gap:10px}
-summary{cursor:pointer;font-weight:800;letter-spacing:-.02em}
-details p{margin:12px 0 0;color:var(--muted)}
-.cta{
-  padding:28px;border-radius:24px;border:1px solid rgba(255,255,255,.16);
-  background:
-    radial-gradient(520px 280px at 10% 10%, rgba(121,231,255,.14), transparent 60%),
-    radial-gradient(460px 260px at 90% 20%, rgba(155,141,255,.12), transparent 60%),
-    linear-gradient(180deg, rgba(18,27,54,.88), rgba(11,17,34,.95));
-  box-shadow:var(--shadow)
-}
-.cta-row,.foot{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-start}
-footer{padding:34px 0 48px;border-top:1px solid var(--line);color:var(--muted)}
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease}
-.reveal.on{opacity:1;transform:none}
-@media (max-width:1080px){
-  .hero-grid,.two,.compare,.stack{grid-template-columns:1fr}
-  .metrics,.grid3,.signals{grid-template-columns:repeat(2,1fr)}
-  h1{max-width:12ch}
-}
-@media (max-width:820px){
-  .links{display:none}
-  .hero{padding-top:56px}
-  .metrics,.grid3,.signals{grid-template-columns:1fr}
-  .step{grid-template-columns:48px 1fr}.num{width:48px;height:48px;border-radius:14px}
-  h1{max-width:100%}
-}
-</style>
-</head>
-<body>
-<header class="top">
-  <div class="wrap">
-    <div class="nav">
-      <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span><span>Sergei Dumnov <span style="color:var(--muted)">| AI Legal Automation</span></span></a>
-      <nav class="links" aria-label="Primary">
-        <a href="#proof">Proof</a>
-        <a href="#stack">Technology</a>
-        <a href="#workflow">Workflow</a>
-        <a href="#precedent">Precedent Upload</a>
-        <a href="#faq">FAQ</a>
-        <a class="btn primary" href="#contact">Book a conversation</a>
-      </nav>
-    </div>
-  </div>
-</header>
-
-<main id="top">
-  <section class="hero">
-    <div class="wrap">
-      <div class="hero-grid">
-        <div class="reveal">
-          <div class="pill"><span class="dot"></span> Working application. Live output. Under one minute.</div>
-          <h1>The technology stack is the product.</h1>
-          <p class="lead">A purpose-built AI legal document automation system for law firms and legal tech teams that need professionally formatted Australian legal documents generated fast, consistently, and with proper drafting discipline. Not “ChatGPT with a form”. A real application with a real document pipeline.</p>
-          <div class="actions">
-            <a class="btn primary" href="#contact">See how it fits your firm</a>
-            <a class="btn" href="#stack">Explore the stack</a>
-          </div>
-          <div class="note">Built around <strong>structured intake</strong>, <strong>skill injection</strong>, <strong>schema-driven rendering</strong>, and <strong>professional DOCX/PDF output</strong>. The result is document automation that respects legal structure instead of improvising around it.</div>
-        </div>
-
-        <aside class="panel reveal" aria-label="Application proof points">
-          <div class="inner">
-            <div class="proof-top">
-              <div>
-                <h3>Working application proof</h3>
-                <p>Generates a complete professionally formatted Australian NDA with rich structure and execution pages. This is already running, which is refreshingly inconvenient for sceptics.</p>
-              </div>
-              <span class="tag">Live app, not a mock-up</span>
-            </div>
-
-            <div class="metrics" role="list" style="margin-top:14px">
-              <div class="metric" role="listitem"><strong>&lt; 1 min</strong><span>Typical generation time from guided intake to downloadable document</span></div>
-              <div class="metric" role="listitem"><strong>80+ blocks</strong><span>Structured output blocks after legal skill injection was introduced</span></div>
-              <div class="metric" role="listitem"><strong>DOCX + PDF</strong><span>One-click export to professional Word and PDF formats</span></div>
-            </div>
-
-            <div class="doc" aria-label="Generated document preview">
-              <div class="doc-top"><span>Generated NDA preview</span><span>AU commonwealth style</span></div>
-              <div class="doc-body">
-                <div class="line w72"></div>
-                <div class="line w48"></div>
-                <div class="blk"><b>PARTIES</b> Acme Pty Ltd … and Beta Services Pty Ltd …</div>
-                <div class="blk"><b>RECITAL A.</b> The parties wish to exchange certain confidential information …</div>
-                <div class="blk"><b>1. Definitions and interpretation</b></div>
-                <div class="blk"><b>2. Confidentiality obligations</b> The Recipient must keep the Confidential Information …</div>
-                <div class="blk"><b>Execution</b> Signed for and on behalf of …</div>
-              </div>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </div>
-  </section>
-
-  <section id="proof">
-    <div class="wrap">
-      <div class="head reveal">
-        <h2>What makes this different</h2>
-        <p>This service is designed for firms that care less about AI theatre and more about whether a document lands with the right structure, numbering, style, margins, and legal conventions. The output is the evidence, and the stack exists to produce that evidence repeatedly.</p>
-      </div>
-      <div class="grid3">
-        <article class="card reveal"><div class="inner"><span class="small">Output quality</span><h3>Structured legal output, not loose text</h3><p>The application generates structured JSON blocks representing legal document components. Rendering then applies exact formatting rules. The AI handles content structure; the renderer handles professional presentation.</p></div></article>
-        <article class="card reveal"><div class="inner"><span class="small">Speed</span><h3>Full document in under a minute</h3><p>Standard NDAs can be produced with 20–30 numbered clauses, formal recitals, definitions, general provisions, and execution pages faster than most lawyers can find the “right” precedent folder.</p></div></article>
-        <article class="card reveal"><div class="inner"><span class="small">Discipline</span><h3>Built to reduce guesswork</h3><p>Guided intake in the UI removes open-ended prompting. Legal drafting conventions are injected every run. Formatting is deterministic. Each layer exists to reduce ambiguity rather than celebrate it.</p></div></article>
-      </div>
-    </div>
-  </section>
-
-  <section id="stack">
-    <div class="wrap">
-      <div class="head reveal">
-        <h2>The technology stack is the centrepiece</h2>
-        <p>Each component has a specific job in the chain from guided input to final legal document. The point is not to sound technical for sport. The point is that legal output quality depends on architecture.</p>
-      </div>
-
-      <div class="stack">
-        <div class="panel reveal">
-          <div class="inner">
-            <div class="stack-item"><h3>R Shiny <span>Application framework</span></h3><p>Provides a guided enterprise-grade user experience so the AI receives precise structured instructions. No open prompt box, no vague user behaviour, no “please be a lawyer” nonsense. Just controlled intake.</p></div>
-            <div class="stack-item" style="margin-top:12px"><h3>Claude API (Claude Sonnet 4.6) <span>Intelligence engine</span></h3><p>Used for complex structured generation with a large context window. Strong enough for long-form legal composition while still following a schema rather than wandering off into decorative ambiguity.</p></div>
-            <div class="stack-item" style="margin-top:12px"><h3>Claude Skills / SKILL.md <span>Legal intelligence layer</span></h3><p>Loads explicit Australian Commonwealth drafting conventions into every generation call: party block logic, recitals, numbering, sign blocks, defined terms, capitalisation, and other details the model should not be left to guess.</p></div>
-            <div class="stack-item" style="margin-top:12px"><h3>python-docx + LibreOffice <span>Rendering layer</span></h3><p>Transforms structured output into a professionally formatted Word document with A4 layout, Times New Roman, justified body text, hanging indents, correct blocks, and headless PDF conversion.</p></div>
-            <div class="stack-item" style="margin-top:12px"><h3>JSON block schema <span>Document contract</span></h3><p>Defined block types — title, preamble, recital, clause, subclause, separator, party block, and sign block — give the renderer precise control. The AI emits structure; the application emits the document.</p></div>
-          </div>
-        </div>
-
-        <div class="panel reveal">
-          <div class="inner">
-<pre class="code"><code>{
-  <span class="k">"document_type"</span>: <span class="v">"nda"</span>,
-  <span class="k">"blocks"</span>: [
-    { <span class="k">"type"</span>: <span class="v">"title"</span>, <span class="k">"text"</span>: <span class="v">"Confidentiality Deed"</span> },
-    { <span class="k">"type"</span>: <span class="v">"preamble"</span>, <span class="k">"text"</span>: <span class="v">"This deed is made on..."</span> },
-    { <span class="k">"type"</span>: <span class="v">"partyblock"</span>, <span class="k">"role"</span>: <span class="v">"Discloser"</span> },
-    { <span class="k">"type"</span>: <span class="v">"separator"</span> },
-    { <span class="k">"type"</span>: <span class="v">"partyblock"</span>, <span class="k">"role"</span>: <span class="v">"Recipient"</span> },
-    { <span class="k">"type"</span>: <span class="v">"recital"</span>, <span class="k">"label"</span>: <span class="v">"A."</span> },
-    { <span class="k">"type"</span>: <span class="v">"clause"</span>, <span class="k">"number"</span>: <span class="v">"1"</span> },
-    { <span class="k">"type"</span>: <span class="v">"subclause"</span>, <span class="k">"number"</span>: <span class="v">"1.1"</span> },
-    { <span class="k">"type"</span>: <span class="v">"signblock"</span>, <span class="k">"entity"</span>: <span class="v">"Acme Pty Ltd"</span> }
-  ],
-  <span class="k">"renderer"</span>: {
-    <span class="k">"page_size"</span>: <span class="v">"A4"</span>,
-    <span class="k">"font"</span>: <span class="v">"Times New Roman"</span>,
-    <span class="k">"body_align"</span>: <span class="v">"justified"</span>,
-    <span class="k">"pdf_export"</span>: <span class="g">true</span>
+  <!doctype html>
+  <html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="AI legal document automation for law firms. A purpose-built system for generating professionally formatted Australian legal documents fast, consistently, and with proper drafting discipline.">
+  <title>AI Legal Document Automation | Sergei Dumnov</title>
+  <style>
+  :root{
+    --bg:#07101f; --bg2:#0b1730; --panel:rgba(16,24,49,.78); --line:rgba(255,255,255,.09);
+    --text:#eef4ff; --muted:#aebcdf; --accent:#79e7ff; --accent2:#9b8dff; --ok:#60d9ab;
+    --shadow:0 18px 50px rgba(0,0,0,.35); --r:20px; --max:1120px;
   }
-}</code></pre>
-          </div>
-        </div>
-      </div>
-
-      <div class="signals reveal">
-        <div class="signal"><strong>Why R Shiny matters</strong><span>It constrains intake so the model is driven by a disciplined workflow rather than a hopeful chat box.</span></div>
-        <div class="signal"><strong>Why SKILL.md matters</strong><span>It turns legal drafting conventions into an explicit input, not tribal lore or model guesswork.</span></div>
-        <div class="signal"><strong>Why schema matters</strong><span>It separates content generation from formatting, which is where most generic AI tools collapse into untidy mush.</span></div>
-        <div class="signal"><strong>Why renderer matters</strong><span>Because a legal document still has to look like one when the client opens it.</span></div>
+  *{box-sizing:border-box} html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--text); font:16px/1.65 Inter,Segoe UI,Arial,sans-serif;
+    background:
+      radial-gradient(900px 520px at 10% -10%, rgba(121,231,255,.14), transparent 60%),
+      radial-gradient(800px 480px at 90% 0, rgba(155,141,255,.12), transparent 55%),
+      linear-gradient(180deg,#050913,#091222 45%,#07101f 100%);
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--max);margin:auto;padding:0 24px}
+  .top{
+    position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);
+    background:rgba(5,9,19,.64);border-bottom:1px solid var(--line)
+  }
+  .nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:-.02em}
+  .mark{
+    width:38px;height:38px;border-radius:14px;position:relative;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 24px rgba(121,231,255,.22)
+  }
+  .mark:before,.mark:after{content:"";position:absolute;background:rgba(7,16,31,.9);border-radius:999px}
+  .mark:before{width:22px;height:4px;left:8px;top:11px;box-shadow:0 10px 0 rgba(7,16,31,.9)}
+  .mark:after{width:4px;height:22px;right:11px;top:8px}
+  .links{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .links a{color:var(--muted);font-size:14px;font-weight:650}
+  .links a:hover{color:var(--text)}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;border-radius:14px;
+    border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);font-weight:760;transition:.18s ease;box-shadow:var(--shadow)
+  }
+  .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
+  .btn.primary{border:0;color:#08111d;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+  .hero{padding:74px 0 42px}
+  .hero-grid,.two,.compare,.stack{display:grid;gap:16px}
+  .hero-grid{grid-template-columns:1.08fr .92fr}
+  .two,.compare,.stack{grid-template-columns:1fr 1fr}
+  .pill{
+    display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:var(--muted);font-size:13px;font-weight:740
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 6px rgba(96,217,171,.1)}
+  h1{margin:18px 0 14px;font-size:clamp(2.6rem,5vw,4.8rem);line-height:.96;letter-spacing:-.05em;max-width:11ch}
+  .lead{max-width:62ch;color:var(--muted);font-size:clamp(1rem,1.3vw,1.14rem)}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 14px}
+  .note{color:var(--muted);font-size:13.5px;max-width:70ch}
+  .note strong{color:var(--text)}
+  .panel,.card{
+    position:relative;overflow:hidden;border:1px solid var(--line);border-radius:var(--r);
+    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));box-shadow:var(--shadow)
+  }
+  .panel{background:linear-gradient(180deg,rgba(12,19,39,.86),rgba(11,17,34,.8))}
+  .panel:before,.card:before{
+    content:"";position:absolute;right:-70px;top:-70px;width:180px;height:180px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(121,231,255,.15), transparent 62%)
+  }
+  .inner{padding:22px}
+  .proof-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+  .proof-top h3,.card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em}
+  .proof-top p,.card p{margin:0;color:var(--muted)}
+  .tag{padding:8px 10px;border-radius:999px;border:1px solid rgba(96,217,171,.25);background:rgba(96,217,171,.1);font-size:12px;color:#c8f8e6;font-weight:760}
+  .metrics,.grid3,.signals{display:grid;gap:10px}
+  .metrics,.grid3{grid-template-columns:repeat(3,1fr)}
+  .metric,.signal,.stack-item,.step,.faq details{
+    border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.035)
+  }
+  .metric,.signal,.stack-item,.step{padding:14px}
+  .metric strong{display:block;font-size:24px;letter-spacing:-.04em}
+  .metric span,.signal span{display:block;color:var(--muted);font-size:12.6px;line-height:1.45}
+  .doc{
+    margin-top:4px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(11,16,32,.94),rgba(7,10,20,.94));overflow:hidden
+  }
+  .doc-top{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted);font-weight:700}
+  .doc-body{padding:16px;display:grid;gap:10px;font:12.6px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .blk{padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+  .blk b{color:var(--accent)}
+  .line{height:10px;border-radius:999px;background:rgba(255,255,255,.08)}
+  .w48{width:48%}.w72{width:72%}
+  section{padding:58px 0}
+  .head{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+  .head h2{margin:0;font-size:clamp(1.8rem,2.5vw,2.6rem);line-height:1.05;letter-spacing:-.04em}
+  .head p{margin:0;color:var(--muted);max-width:66ch}
+  .small{display:inline-block;margin-bottom:10px;color:#8ea3c8;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .stack-item{position:relative;padding-left:18px}
+  .stack-item:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--accent),var(--accent2),var(--ok))}
+  .stack-item h3{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .stack-item h3 span{font-size:12px;color:#8ea3c8;letter-spacing:.08em;text-transform:uppercase}
+  .code{margin:0;padding:16px;overflow:auto;font:13px/1.58 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#dfe8ff}
+  .k{color:var(--accent)} .v{color:#cbbcff} .g{color:#93f0c9}
+  .signals{grid-template-columns:repeat(4,1fr);margin-top:16px}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:14px}
+  .num{
+    width:56px;height:56px;border-radius:16px;display:grid;place-items:center;
+    font-size:18px;font-weight:900;color:#08111d;background:linear-gradient(135deg,var(--accent),var(--accent2))
+  }
+  .list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+  .list li{display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:start;color:var(--muted)}
+  .b{width:18px;height:18px;border-radius:7px;margin-top:2px;position:relative;background:rgba(121,231,255,.12);border:1px solid rgba(121,231,255,.26)}
+  .b.warn{background:rgba(255,209,102,.11);border-color:rgba(255,209,102,.24)}
+  .b:after{content:"";position:absolute;left:4px;top:4px;width:8px;height:4px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+  .b.warn:after{border-left-color:#ffd166;border-bottom-color:#ffd166}
+  .faq{display:grid;gap:10px}
+  summary{cursor:pointer;font-weight:800;letter-spacing:-.02em}
+  details p{margin:12px 0 0;color:var(--muted)}
+  .cta{
+    padding:28px;border-radius:24px;border:1px solid rgba(255,255,255,.16);
+    background:
+      radial-gradient(520px 280px at 10% 10%, rgba(121,231,255,.14), transparent 60%),
+      radial-gradient(460px 260px at 90% 20%, rgba(155,141,255,.12), transparent 60%),
+      linear-gradient(180deg, rgba(18,27,54,.88), rgba(11,17,34,.95));
+    box-shadow:var(--shadow)
+  }
+  .cta-row,.foot{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-start}
+  footer{padding:34px 0 48px;border-top:1px solid var(--line);color:var(--muted)}
+  .reveal{opacity:1;transform:none}
+  @media (max-width:1080px){
+    .hero-grid,.two,.compare,.stack{grid-template-columns:1fr}
+    .metrics,.grid3,.signals{grid-template-columns:repeat(2,1fr)}
+    h1{max-width:12ch}
+  }
+  @media (max-width:820px){
+    .links{display:none}
+    .hero{padding-top:56px}
+    .metrics,.grid3,.signals{grid-template-columns:1fr}
+    .step{grid-template-columns:48px 1fr}.num{width:48px;height:48px;border-radius:14px}
+    h1{max-width:100%}
+  }
+  </style>
+  </head>
+  <body>
+  <header class="top">
+    <div class="wrap">
+      <div class="nav">
+        <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span><span>Sergei Dumnov <span style="color:var(--muted)">| AI Legal Automation</span></span></a>
+        <nav class="links" aria-label="Primary">
+          <a href="#proof">Proof</a>
+          <a href="#stack">Technology</a>
+          <a href="#precedent">Precedent Upload</a>
+          <a href="#faq">FAQ</a>
+          <a class="btn primary" href="#contact">Book a conversation</a>
+        </nav>
       </div>
     </div>
-  </section>
+  </header>
 
-  <section id="workflow">
-    <div class="wrap">
-      <div class="head reveal">
-        <h2>From intake to signed-looking document</h2>
-        <p>The workflow is intentionally structured so the application behaves like a drafting system rather than a conversational toy.</p>
-      </div>
-
-      <div class="two">
-        <div class="panel reveal">
-          <div class="inner">
-            <div class="step"><div class="num">1</div><div><h3>Guided intake in the app</h3><p>The user answers targeted questions about parties, purpose, term, jurisdiction, and commercial details. That structured intake is what makes the downstream output consistent.</p></div></div>
-            <div class="step" style="margin-top:12px"><div class="num">2</div><div><h3>Legal skill injection</h3><p>Australian Commonwealth drafting guidance from SKILL.md is included in the generation context for every run, so legal conventions are provided explicitly rather than left to inference.</p></div></div>
-            <div class="step" style="margin-top:12px"><div class="num">3</div><div><h3>Structured JSON generation</h3><p>The model returns block-level structure across defined block types, which prevents the renderer from guessing how the document should be assembled.</p></div></div>
-            <div class="step" style="margin-top:12px"><div class="num">4</div><div><h3>Renderer creates DOCX + PDF</h3><p>python-docx applies legal formatting rules and LibreOffice handles headless PDF conversion. Not glamorous, but it is where professional output actually happens.</p></div></div>
-          </div>
-        </div>
-
-        <div class="compare reveal">
-          <div class="card"><div class="inner"><span class="small">Generic AI drafting</span><h3>What firms are rightly sceptical about</h3><ul class="list"><li><span class="b warn"></span><span>Open-ended prompting means inconsistent input quality.</span></li><li><span class="b warn"></span><span>Formatting is improvised, not engineered.</span></li><li><span class="b warn"></span><span>Legal conventions are implicit at best and imaginary at worst.</span></li><li><span class="b warn"></span><span>Output often needs cleanup before it can be shown to anyone important.</span></li></ul></div></div>
-          <div class="card"><div class="inner"><span class="small">This system</span><h3>Purpose-built legal document automation</h3><ul class="list"><li><span class="b"></span><span>Structured guided intake reduces ambiguity at the source.</span></li><li><span class="b"></span><span>Legal drafting knowledge is injected explicitly every run.</span></li><li><span class="b"></span><span>Schema-based output gives the renderer precise control.</span></li><li><span class="b"></span><span>Word and PDF export are part of the product, not an afterthought.</span></li></ul></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="precedent">
-    <div class="wrap">
-      <div class="head reveal">
-        <h2>The next feature: precedent upload</h2>
-        <p>This is the step that turns a capable drafting system into a firm-specific drafting system. Upload one of the firm’s own documents and let the application absorb clause preferences, defined-term habits, tone, and drafting voice.</p>
-      </div>
-      <div class="two">
-        <div class="card reveal"><div class="inner"><span class="small">Why it matters</span><h3>Not an AI legal tool. Their AI legal tool.</h3><p>After precedent upload, documents are no longer written to a generic standard. They are generated in the style of the firm itself — its clause preferences, its habits, its voice.</p></div></div>
-        <div class="card reveal"><div class="inner"><span class="small">Commercial value</span><h3>Best fit for high-volume repeatable drafting</h3><p>Financial services, employment, property, professional services, and technology-focused practices gain the most: routine drafting becomes faster, senior time is protected, and consistency improves instead of decaying under document sprawl.</p></div></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="faq">
-    <div class="wrap">
-      <div class="head reveal">
-        <h2>Questions serious buyers will ask</h2>
-        <p>Quite right too.</p>
-      </div>
-      <div class="faq">
-        <details class="reveal"><summary>Is this a prototype, a demo, or a working application?</summary><p>It is a working application producing complete professionally formatted legal documents, including rich structured content and one-click DOCX/PDF output.</p></details>
-        <details class="reveal"><summary>Why focus so much on the technology stack?</summary><p>Because the stack explains the output quality. Controlled intake, structured generation, drafting guidance, schema-driven rendering, and export are what make the result credible.</p></details>
-        <details class="reveal"><summary>How does this avoid generic AI drafting behaviour?</summary><p>The application removes open-ended prompting, injects legal drafting knowledge on every run, and separates structured content generation from formatting.</p></details>
-        <details class="reveal"><summary>Can the system become specific to a single firm?</summary><p>Yes. The next planned feature is precedent upload so a firm can supply its own document and have future outputs follow its clause preferences, defined-term habits, tone, and house style.</p></details>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <div class="wrap">
-      <div class="cta reveal">
-        <div class="cta-row">
-          <div>
-            <h2>Discuss the architecture, not just the headline</h2>
-            <p>If you want a site that sells this service properly, it has to show that the legal output is a consequence of system design. That is what this page does. It positions you as someone who built a working application and can explain exactly why it works.</p>
-            <div class="actions" style="margin-top:18px">
-              <a class="btn primary" href="mailto:s.dumnov@gmail.com?subject=AI%20Legal%20Document%20Automation%20Enquiry">s.dumnov@gmail.com</a>
-              <a class="btn" href="https://www.linkedin.com/in/dumnov/" target="_blank" rel="noopener">LinkedIn</a>
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div class="reveal">
+            <div class="pill"><span class="dot"></span> Working application. Live output. Under one minute.</div>
+            <h1>The technology stack is the product.</h1>
+            <p class="lead">A purpose-built AI legal document automation system for law firms and legal tech teams that need professionally formatted Australian legal documents generated fast, consistently, and with proper drafting discipline. A real application with a real document pipeline — structured intake, explicit legal skill injection, schema-driven rendering, and professional export.</p>
+            <div class="actions">
+              <a class="btn primary" href="#contact">See how it fits your firm</a>
+              <a class="btn" href="#stack">Explore the stack</a>
             </div>
+            <div class="note">Built around <strong>structured intake</strong>, <strong>skill injection</strong>, <strong>schema-driven rendering</strong>, and <strong>professional DOCX/PDF output</strong>. The result is document automation that respects legal structure instead of improvising around it.</div>
           </div>
-          <div class="panel" style="max-width:370px;width:100%">
+
+          <aside class="panel reveal" aria-label="Application proof points">
             <div class="inner">
-              <span class="small">Ideal audience</span>
-              <h3 style="margin:0 0 10px;font-size:20px">Law firms, legal tech teams, document-heavy businesses</h3>
-              <p style="margin:0;color:var(--muted)">Especially those handling high-volume repeatable documents where drafting consistency, output quality, and partner time all have suspiciously direct effects on margin.</p>
+              <div class="proof-top">
+                <div>
+                  <h3>Working application proof</h3>
+                  <p>Generates a complete professionally formatted Australian NDA with rich structure and execution pages. This is already running, which is refreshingly inconvenient for sceptics.</p>
+                </div>
+                <span class="tag">Live app, not a mock-up</span>
+              </div>
+
+              <div class="metrics" role="list" style="margin-top:14px">
+                <div class="metric" role="listitem"><strong>Fast</strong><span>From guided intake to downloadable document in a single session</span></div>
+                <div class="metric" role="listitem"><strong>80+ blocks</strong><span>Distinct document components — clauses, recitals, party blocks, sign blocks — assembled in the correct legal order</span></div>
+                <div class="metric" role="listitem"><strong>DOCX + PDF</strong><span>One-click export to professional Word and PDF formats</span></div>
+              </div>
+
+              <div class="doc" aria-label="Generated document preview">
+                <div class="doc-top"><span>Generated NDA preview</span><span>AU commonwealth style</span></div>
+                <div class="doc-body">
+                  <div class="line w72"></div>
+                  <div class="line w48"></div>
+                  <div class="blk"><b>PARTIES</b> Acme Pty Ltd … and Beta Services Pty Ltd …</div>
+                  <div class="blk"><b>RECITAL A.</b> The parties wish to exchange certain confidential information …</div>
+                  <div class="blk"><b>1. Definitions and interpretation</b></div>
+                  <div class="blk"><b>2. Confidentiality obligations</b> The Recipient must keep the Confidential Information …</div>
+                  <div class="blk"><b>Execution</b> Signed for and on behalf of …</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="proof">
+      <div class="wrap">
+        <div class="reveal" style="margin-bottom:22px">
+          <h2 style="margin:0 0 12px;font-size:clamp(1.8rem,2.5vw,2.6rem);line-height:1.05;letter-spacing:-.04em">What makes this different</h2>
+          <p style="margin:0;color:var(--muted);max-width:100%">This service is designed for firms that care less about AI theatre and more about whether a document lands with the right structure, numbering, style, margins, and legal conventions. The output is the evidence, and the stack exists to produce that evidence repeatedly.</p>
+        </div>
+        <div class="grid3">
+          <article class="card reveal"><div class="inner"><span class="small">Output quality</span><h3>Structured legal output, not loose text</h3><p>The output is a properly structured legal document — correct clause hierarchy, formal recitals, defined terms, and execution pages — formatted to a professional standard from the first run.</p></div></article>
+          <article class="card reveal"><div class="inner"><span class="small">Speed</span><h3>Full document in under a minute</h3><p>Standard NDAs can be produced with 20–30 numbered clauses, formal recitals, definitions, general provisions, and execution pages faster than most lawyers can find the “right” precedent folder.</p></div></article>
+          <article class="card reveal"><div class="inner"><span class="small">Discipline</span><h3>Built to reduce guesswork</h3><p>The system asks the right questions upfront, applies Australian legal drafting standards automatically, and produces consistent output every time — regardless of who is using it.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <div class="wrap">
+        <div class="reveal" style="margin-bottom:22px">
+          <h2 style="margin:0 0 12px;font-size:clamp(1.8rem,2.5vw,2.6rem);line-height:1.05;letter-spacing:-.04em">The technology stack is the centrepiece</h2>
+          <p style="margin:0;color:var(--muted);max-width:100%">Each component has a specific job in the chain from guided input to final legal document. The quality of the output is a direct consequence of how the system is built.</p>
+        </div>
+
+        <div class="stack">
+          <div class="panel reveal">
+            <div class="inner">
+              <div class="stack-item"><h3>R Shiny <span>Application framework</span></h3><p>The application has a clean, modern interface that walks users through a series of targeted questions — parties, purpose, jurisdiction, key terms. No typing instructions into a chat box. Just a well-designed form that knows what a legal document needs.</p></div>
+              <div class="stack-item" style="margin-top:12px"><h3>Claude API (Claude Sonnet 4.6) <span>Intelligence engine</span></h3><p>The AI engine behind the document generation — capable of producing long, detailed legal documents in one pass, with the structure, tone, and completeness a legal document requires.</p></div>
+              <div class="stack-item" style="margin-top:12px"><h3>Claude Skills / SKILL.md <span>Legal intelligence layer</span></h3><p>Loads explicit Australian Commonwealth drafting conventions into every generation call: party block logic, recitals, numbering, sign blocks, defined terms, capitalisation, and other details the model should not be left to guess.</p></div>
+              <div class="stack-item" style="margin-top:12px"><h3>python-docx + LibreOffice <span>Rendering layer</span></h3><p>Transforms the generated content into a professionally formatted Word document and PDF — ready to send, file, or print without any manual cleanup.</p></div>
+              <div class="stack-item" style="margin-top:12px"><h3>JSON block schema <span>Document contract</span></h3><p>Defined block types — title, preamble, recital, clause, subclause, separator, party block, and sign block — give the renderer precise control. The AI emits structure; the application emits the document.</p></div>
+            </div>
+          </div>
+
+          <div class="panel reveal">
+            <div class="inner">
+              <p style="margin:0 0 12px;color:var(--muted);font-size:14px">The document structure is defined precisely before anything is rendered. Every block has a type, every type has rules.</p>
+  <pre class="code"><code>{
+    <span class="k">"document_type"</span>: <span class="v">"nda"</span>,
+    <span class="k">"blocks"</span>: [
+      { <span class="k">"type"</span>: <span class="v">"title"</span>, <span class="k">"text"</span>: <span class="v">"Confidentiality Deed"</span> },
+      { <span class="k">"type"</span>: <span class="v">"preamble"</span>, <span class="k">"text"</span>: <span class="v">"This deed is made on..."</span> },
+      { <span class="k">"type"</span>: <span class="v">"partyblock"</span>, <span class="k">"role"</span>: <span class="v">"Discloser"</span> },
+      { <span class="k">"type"</span>: <span class="v">"separator"</span> },
+      { <span class="k">"type"</span>: <span class="v">"partyblock"</span>, <span class="k">"role"</span>: <span class="v">"Recipient"</span> },
+      { <span class="k">"type"</span>: <span class="v">"recital"</span>, <span class="k">"label"</span>: <span class="v">"A."</span> },
+      { <span class="k">"type"</span>: <span class="v">"clause"</span>, <span class="k">"number"</span>: <span class="v">"1"</span> },
+      { <span class="k">"type"</span>: <span class="v">"subclause"</span>, <span class="k">"number"</span>: <span class="v">"1.1"</span> },
+      { <span class="k">"type"</span>: <span class="v">"signblock"</span>, <span class="k">"entity"</span>: <span class="v">"Acme Pty Ltd"</span> }
+    ],
+    <span class="k">"renderer"</span>: {
+      <span class="k">"page_size"</span>: <span class="v">"A4"</span>,
+      <span class="k">"font"</span>: <span class="v">"Times New Roman"</span>,
+      <span class="k">"body_align"</span>: <span class="v">"justified"</span>,
+      <span class="k">"pdf_export"</span>: <span class="g">true</span>
+    }
+  }</code></pre>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </section>
+
+
+
+    <section id="precedent">
+      <div class="wrap">
+        <div class="reveal" style="margin-bottom:22px">
+          <h2 style="margin:0 0 12px;font-size:clamp(1.8rem,2.5vw,2.6rem);line-height:1.05;letter-spacing:-.04em">The next feature: precedent upload</h2>
+          <p style="margin:0 0 20px;color:var(--muted);max-width:100%">This is the step that turns a capable drafting system into a firm-specific drafting system.</p>
+          <div style="border-left:3px solid var(--accent);padding:16px 20px;background:rgba(121,231,255,.06);border-radius:0 12px 12px 0;">
+            <p style="margin:0;font-size:1.1rem;line-height:1.6;color:var(--text)">Upload one of the firm’s own precedents and the system learns its drafting style — clause structure, defined terms, tone, and house conventions — so every document generated afterwards feels like it was written in-house.</p>
+          </div>
+        </div>
+        <div class="two">
+          <div class="card reveal"><div class="inner"><span class="small">Why it matters</span><h3>Built around your firm's own documents</h3><p>After uploading a precedent, the system generates new documents in your firm's own style — your clause structure, your defined terms, your drafting voice. Not a generic legal template. Your standard.</p></div></div>
+          <div class="card reveal"><div class="inner"><span class="small">Commercial value</span><h3>Best fit for high-volume repeatable drafting</h3><p>Financial services, employment, property, professional services, and technology-focused practices gain the most: routine drafting becomes faster, senior time is protected, and consistency improves instead of decaying under document sprawl.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <div class="head reveal">
+          <h2>Questions serious buyers will ask</h2>
+          <p>Quite right too.</p>
+        </div>
+        <div class="faq">
+          <details class="reveal"><summary>Is this a prototype, a demo, or a working application?</summary><p>It is a working prototype — it produces complete, professionally formatted legal documents today. Active development is ongoing, with new features being added.</p></details>
+          <details class="reveal"><summary>Why focus so much on the technology stack?</summary><p>Because the stack explains the output quality. Controlled intake, structured generation, drafting guidance, schema-driven rendering, and export are what make the result credible.</p></details>
+          <details class="reveal"><summary>How does this avoid generic AI drafting behaviour?</summary><p>Instead of asking users to type instructions, the application guides them through a structured form. Australian legal drafting standards are applied automatically, and the final document is formatted and ready to use.</p></details>
+          <details class="reveal"><summary>Can the system become specific to a single firm?</summary><p>Yes. The next planned feature is precedent upload so a firm can supply its own document and have future outputs follow its clause preferences, defined-term habits, tone, and house style.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <div class="cta reveal">
+          <div class="cta-row">
+            <div>
+              <h2>Ready to see it in action?</h2>
+              <p>If you are evaluating AI document tools for your firm — particularly for high-volume repeatable drafting where consistency and output quality matter — let’s have a direct conversation about what the system does, what it produces, and where it is heading.</p>
+              <div class="actions" style="margin-top:18px">
+                <a class="btn primary" href="mailto:s.dumnov@gmail.com">s.dumnov@gmail.com</a>
+                <a class="btn" href="https://www.linkedin.com/in/dumnov/" target="_blank" rel="noopener">LinkedIn</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <div><span style="color:var(--text)">© 2025 Sergei Dumnov. All rights reserved.</span></div>
+      <div>AI Legal Document Automation · AI · ML · BI</div>
     </div>
-  </section>
-</main>
+  </footer>
 
-<footer>
-  <div class="wrap foot">
-    <div><strong style="color:var(--text)">Sergei Dumnov</strong></div>
-    <div>AI Legal Document Automation · AI · ML · BI</div>
-  </div>
-</footer>
-
-<script>
-(function(){
-  const els=document.querySelectorAll('.reveal');
-  const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('on')),{threshold:.12});
-  els.forEach(el=>io.observe(el));
-})();
-</script>
-</body>
-</html>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.j
